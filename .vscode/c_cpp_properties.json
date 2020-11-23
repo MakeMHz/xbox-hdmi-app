@@ -1,0 +1,29 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/source/**",
+                "${workspaceFolder}/include/**",
+                "/usr/include/SDL2",
+                "/home/dustin/Projects/nxdk/lib",
+                "/home/dustin/Projects/nxdk/lib/xboxrt/libc_extensions",
+                "/home/dustin/Projects/nxdk/lib/hal",
+                "/home/dustin/Projects/nxdk/lib/pdclib/include",
+                "/home/dustin/Projects/nxdk/lib/pdclib/platform/xbox/include",
+                "/home/dustin/Projects/nxdk/lib/winapi",
+                "/home/dustin/Projects/nxdk/lib/xboxrt/vcruntime"
+            ],
+            "defines": [
+                "_XBOX=1",
+                "NXDK_DIR=/home/dustin/Projects/nxdk"
+            ],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}

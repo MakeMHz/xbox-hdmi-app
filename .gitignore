@@ -1,0 +1,11 @@
+*.exe
+*.cpp.d
+*.o
+*.obj
+*.d
+*.pdb
+*.lib
+*.iso
+main
+bin/
+

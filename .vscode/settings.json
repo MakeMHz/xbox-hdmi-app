@@ -1,0 +1,12 @@
+{
+    "C_Cpp.errorSquiggles": "Enabled",
+    "C_Cpp.clang_format_fallbackStyle": "file",
+    "files.associations": {
+        "list": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "*.tcc": "cpp",
+        "optional": "cpp",
+        "future": "cpp"
+    }
+}
