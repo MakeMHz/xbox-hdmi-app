@@ -17,6 +17,8 @@ class Scene0 : public Scene {
   void render(SDL_Renderer *renderer);
 
  private:
+  bool findKernelPatchVersion(uint8_t *version);
+
   uint8_t current_item = 0;
   uint8_t secret_counter = 0;
   bool secret_found = false;
@@ -25,9 +27,10 @@ class Scene0 : public Scene {
   SDL_Texture *arrow_texture;
   const SDL_Color font_color = {0xFF, 0xFF, 0xFF, 0xFF};
 
-  SDL_Texture *info_line[1] = { NULL };
-  SDL_Rect info_line_pos[1] = {
+  SDL_Texture *info_line[2] = { NULL };
+  SDL_Rect info_line_pos[2] = {
       {80, 420, 0, 0},  // Firmware Version
+      {80, 396, 0, 0},  // BIOS Patch Version
   };
 
   const SDL_Rect arrow_pos[4] = {
@@ -38,7 +41,9 @@ class Scene0 : public Scene {
   };
 
   uint8_t firmware_version[3] = { 0 };
-  char text_firmware[100] = { 0 };
+  uint8_t kernel_patch_version[3] = { 0 };
+
+  char text_buffer[100] = { 0 };
 };
 
 #endif

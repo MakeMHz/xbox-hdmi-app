@@ -28,7 +28,7 @@ Scene0::Scene0() {
 
   //
   if(HalReadSMBusValue(I2C_HDMI_ADRESS, I2C_FIRMWARE_VERSION + 0, false, &smbus_read) != 0) {
-    snprintf(text_firmware, sizeof(text_firmware), "XboxHDMI not detected!");
+    snprintf(text_buffer, sizeof(text_buffer), "XboxHDMI not detected!");
   } else {
     firmware_version[0] = (uint8_t)smbus_read;
 
@@ -43,14 +43,27 @@ Scene0::Scene0() {
       firmware_version[0] = 1;
     }
 
-    snprintf(text_firmware, sizeof(text_firmware), "Current Firmware Version: %u.%u.%u",
+    snprintf(text_buffer, sizeof(text_buffer), "Firmware Version: %u.%u.%u",
       firmware_version[0], firmware_version[1], firmware_version[2]);
   }
 
-  info_line[0] = drawText(gFontSmall, font_color, text_firmware);
+  info_line[0] = drawText(gFontSmall, font_color, text_buffer);
   SDL_QueryTexture(info_line[0], NULL, NULL,
                    &info_line_pos[0].w,
                    &info_line_pos[0].h);
+
+  //
+  if(findKernelPatchVersion(kernel_patch_version)) {
+    snprintf(text_buffer, sizeof(text_buffer), "Kernel Patch Version: %u.%u.%u",
+      kernel_patch_version[0], kernel_patch_version[1], kernel_patch_version[2]);
+  } else {
+    snprintf(text_buffer, sizeof(text_buffer), "Kernel patch not detected!");
+  }
+
+  info_line[1] = drawText(gFontSmall, font_color, text_buffer);
+  SDL_QueryTexture(info_line[1], NULL, NULL,
+                   &info_line_pos[1].w,
+                   &info_line_pos[1].h);
 }
 
 Scene0::~Scene0(void) {
@@ -92,8 +105,25 @@ void Scene0::event(SDL_Event event) {
   }
 }
 
+bool Scene0::findKernelPatchVersion(uint8_t *version) {
+  char tag[] = "HDMIkv";
+
+  for(uint16_t offset = 0; offset < 0x00001000; offset++) {
+    if(memcmp(tag, ((char *)&AvSetDisplayMode) + offset, sizeof(tag) - 1) == 0) {
+      version[0] = (((char *)&AvSetDisplayMode) + offset)[6];
+      version[1] = (((char *)&AvSetDisplayMode) + offset)[7];
+      version[2] = (((char *)&AvSetDisplayMode) + offset)[8];
+
+      return true;
+    }
+  }
+
+  return false;
+}
+
 void Scene0::render(SDL_Renderer *renderer) {
   SDL_RenderCopy(gRenderer, background_texture, NULL, NULL);
   SDL_RenderCopy(gRenderer, arrow_texture, NULL, &arrow_pos[current_item]);
   SDL_RenderCopy(gRenderer, info_line[0], NULL, &info_line_pos[0]);
+  SDL_RenderCopy(gRenderer, info_line[1], NULL, &info_line_pos[1]);
 }
