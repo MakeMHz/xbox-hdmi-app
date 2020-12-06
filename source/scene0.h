@@ -23,6 +23,12 @@ class Scene0 : public Scene {
 
   SDL_Texture *background_texture;
   SDL_Texture *arrow_texture;
+  const SDL_Color font_color = {0xFF, 0xFF, 0xFF, 0xFF};
+
+  SDL_Texture *info_line[1] = { NULL };
+  SDL_Rect info_line_pos[1] = {
+      {80, 420, 0, 0},  // Firmware Version
+  };
 
   const SDL_Rect arrow_pos[4] = {
       {406, 190 + (40 * 0), 24, 16},  // Self Test
@@ -30,6 +36,9 @@ class Scene0 : public Scene {
       {406, 190 + (40 * 2), 24, 16},  // Firemware Update
       {532, 406, 24, 16}              // Secret Menu
   };
+
+  uint8_t firmware_version[3] = { 0 };
+  char text_firmware[100] = { 0 };
 };
 
 #endif
