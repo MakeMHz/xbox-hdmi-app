@@ -53,8 +53,6 @@ int SCREEN_HEIGHT = 480;
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
 SDL_Renderer *gRenderer = NULL;
-// SDL_Joystick *gGameController = NULL;
-SDL_GameController *gameController = NULL;
 
 TTF_Font *gFont = NULL;
 TTF_Font *gFontSmall = NULL;
@@ -84,11 +82,14 @@ int main(void) {
                  "Couldn't find any joysticks.\n");
     printSDLErrorAndReboot();
   } else {
-    if (SDL_IsGameController(0)) {
-      gameController = SDL_GameControllerOpen(0);
-    }
-    if (gameController == nullptr) {
-      printSDLErrorAndReboot();
+    SDL_GameController *controller = NULL;
+    for (int i = 0; i < SDL_NumJoysticks(); ++i) {
+      if (SDL_IsGameController(i)) {
+        controller = SDL_GameControllerOpen(i);
+        if (controller == nullptr) {
+          printSDLErrorAndReboot();
+        }
+      }
     }
   }
 
