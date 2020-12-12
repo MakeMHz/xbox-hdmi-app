@@ -10,10 +10,12 @@
 #include <hal/video.h>
 #include <hal/xbox.h>
 #include <windows.h>
+#define FONT_PATH "D:\\assets\\fonts\\RobotoMono-Regular.ttf"
 #else
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#define FONT_PATH "assets/fonts/RobotoMono-Regular.ttf"
 #endif
 
 #include "common.h"
@@ -123,22 +125,14 @@ int main(void) {
   }
 
 // Load font
-#ifdef _XBOX
-  gFont = TTF_OpenFont("D:\\assets\\fonts\\RobotoMono-Regular.ttf", 26);
-#else
-  gFont = TTF_OpenFont("assets/fonts/RobotoMono-Regular.ttf", 26);
-#endif
+  gFont = TTF_OpenFont(FONT_PATH, 26);
   if (gFont == NULL) {
     debugPrint("Couldn't load font: %s", TTF_GetError());
     Sleep(2000);
     return 0;
   }
-#ifdef _XBOX
-  gFontSmall = TTF_OpenFont("D:\\assets\\fonts\\RobotoMono-Regular.ttf", 20);
-#else
-  gFontSmall = TTF_OpenFont("assets/fonts/RobotoMono-Regular.ttf", 20);
-#endif
-  if (gFont == NULL) {
+  gFontSmall = TTF_OpenFont(FONT_PATH, 20);
+  if (gFontSmall == NULL) {
     debugPrint("Couldn't load font: %s", TTF_GetError());
     Sleep(2000);
     return 0;
