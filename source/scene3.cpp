@@ -55,12 +55,15 @@ void Scene3::render(SDL_Renderer *renderer) {
     }
 #ifdef _XBOX
     case UpdateState::CheckFirmware: {
-      HalReadSMBusValue(I2C_HDMI_ADRESS, I2C_BOOT_MODE, false, &current_boot);
+      if(HalReadSMBusValue(I2C_HDMI_ADRESS, I2C_BOOT_MODE, false, &current_boot) != 0) {
+        console->print("No XboxHDMI hardware found.");
+        update_stage = UpdateState::End;
+      } else {
+        console->print("Found... Revision: 3C");
+        console->print("Firmware Mode: 0x%02X", current_boot);
+        update_stage = UpdateState::GetFirmwareInfo;
+      }
 
-      console->print("Found... Revision: 3C");
-      console->print("Firmware Mode: 0x%02X", current_boot);
-
-      update_stage = UpdateState::GetFirmwareInfo;
       break;
     }
     case UpdateState::GetFirmwareInfo: {
