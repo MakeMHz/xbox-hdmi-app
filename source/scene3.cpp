@@ -59,7 +59,6 @@ void Scene3::render(SDL_Renderer *renderer) {
         console->print("No XboxHDMI hardware found.");
         update_stage = UpdateState::End;
       } else {
-        console->print("Found... Revision: 3C");
         console->print("Firmware Mode: 0x%02X", current_boot);
         update_stage = UpdateState::GetFirmwareInfo;
       }
