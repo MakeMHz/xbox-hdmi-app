@@ -51,9 +51,6 @@ int SCREEN_WIDTH = 720;
 int SCREEN_HEIGHT = 480;
 #endif
 
-#define MAX(x, y) (((x) > (y)) ? (x) : (y))
-#define MIN(x, y) (((x) < (y)) ? (x) : (y))
-
 SDL_Renderer *gRenderer = NULL;
 
 TTF_Font *gFont = NULL;
@@ -147,31 +144,23 @@ int main(void) {
 #endif
 
     if (load_scene != current_scene) {
+      delete currentScene;
+      current_scene = load_scene;
       switch (load_scene) {
         case 0:
-          delete currentScene;
           currentScene = new Scene0();
-          current_scene = load_scene;
           break;
         case 1:
-          delete currentScene;
           currentScene = new Scene1();
-          current_scene = load_scene;
           break;
         case 2:
-          delete currentScene;
           currentScene = new Scene2();
-          current_scene = load_scene;
           break;
         case 3:
-          delete currentScene;
           currentScene = new Scene3();
-          current_scene = load_scene;
           break;
         case 4:
-          delete currentScene;
           currentScene = new Scene4();
-          current_scene = load_scene;
           break;
         default:
           load_scene = 0;
