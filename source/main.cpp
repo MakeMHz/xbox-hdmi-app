@@ -65,6 +65,14 @@ uint8_t load_scene = 0;
 
 bool running = true;
 
+void update_controllers() {
+  for (int i = 0; i < SDL_NumJoysticks(); ++i) {
+    if (SDL_IsGameController(i)) {
+      SDL_GameControllerOpen(i);
+    }
+  }
+}
+
 int main(void) {
 #ifdef _XBOX
   XVideoSetMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, REFRESH_DEFAULT);
@@ -79,21 +87,8 @@ int main(void) {
   // Load joystick
   SDL_SetHint(SDL_HINT_JOYSTICK_ALLOW_BACKGROUND_EVENTS, "1");
 
-  if (SDL_NumJoysticks() < 1) {
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
-                 "Couldn't find any joysticks.\n");
-    printSDLErrorAndReboot();
-  } else {
-    SDL_GameController *controller = NULL;
-    for (int i = 0; i < SDL_NumJoysticks(); ++i) {
-      if (SDL_IsGameController(i)) {
-        controller = SDL_GameControllerOpen(i);
-        if (controller == nullptr) {
-          printSDLErrorAndReboot();
-        }
-      }
-    }
-  }
+  // Update controllers at least once before the main loop
+  update_controllers();
 
   if (TTF_Init() != 0) {
     debugPrint("TTF_Init failed: %s", TTF_GetError());
@@ -140,6 +135,9 @@ int main(void) {
 
   // Main render loop
   Scene *currentScene = new Scene0();
+
+  // Keep track of frame-counter
+  uint32_t frame_counter = 0;
 
   while (running) {
 #ifdef _XBOX
@@ -197,6 +195,13 @@ int main(void) {
     currentScene->render(gRenderer);
 
     SDL_RenderPresent(gRenderer);
+
+    // Update controllers roughly every second
+    if(frame_counter % 60 == 0) {
+      update_controllers();
+    }
+
+    frame_counter++;
   }
 
   return 0;
