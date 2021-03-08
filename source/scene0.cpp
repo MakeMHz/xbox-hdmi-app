@@ -107,12 +107,13 @@ void Scene0::event(SDL_Event event) {
 
 bool Scene0::findKernelPatchVersion(uint8_t *version) {
   char tag[] = "HDMIkv";
+  char *findStartAddress = ((char *)&AvGetSavedDataAddress) - 0x00002000;
 
-  for(uint16_t offset = 0; offset < 0x00001000; offset++) {
-    if(memcmp(tag, ((char *)&AvSetDisplayMode) + offset, sizeof(tag) - 1) == 0) {
-      version[0] = (((char *)&AvSetDisplayMode) + offset)[6];
-      version[1] = (((char *)&AvSetDisplayMode) + offset)[7];
-      version[2] = (((char *)&AvSetDisplayMode) + offset)[8];
+  for(uint16_t offset = 0; offset < 0x00004000; offset++) {
+    if(memcmp(tag, findStartAddress + offset, sizeof(tag) - 1) == 0) {
+      version[0] = (findStartAddress + offset)[6];
+      version[1] = (findStartAddress + offset)[7];
+      version[2] = (findStartAddress + offset)[8];
 
       return true;
     }
